@@ -10,3 +10,4 @@ export { LoadingIndicator } from "./LoadingIndicator";
 export * from "./Popover";
 export * from "./Textarea";
 export * from "./ToggleGroup";
+export { PageHeading } from "./PageHeading";
