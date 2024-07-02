@@ -19,7 +19,7 @@ interface Props
 }
 
 const appNavigation = [
-  { name: "My Movies", href: "#", icon: FiVideo, current: true },
+  { name: "All Movies", href: "#", icon: FiVideo, current: true },
   { name: "Liked Movies", href: "#", icon: FiHeart, current: false },
 ];
 
