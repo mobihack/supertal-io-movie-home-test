@@ -1,0 +1,17 @@
+.env
+node_modules/
+dist/
+yarn.lock
+yarn-error.log
+logs/
+coverage/
+db/*.sqlite
+certificates
+
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
