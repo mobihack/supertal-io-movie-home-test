@@ -1,5 +1,4 @@
 import { MovieCard } from "@/containers/MovieCard/MovieCard";
-import sample_movies from "../../../../../extra/sample_movies.json";
 import { Button, PageHeading } from "@/components";
 import { useFetch } from "@/hooks/useFetch";
 import { getMoviesAPI } from "@/api/movies/getMoviesAPI";
