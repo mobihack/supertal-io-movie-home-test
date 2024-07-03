@@ -3,6 +3,7 @@ import express from 'express';
 import { z } from 'zod';
 
 import appDataSource from '../config/app-data-source';
+import { UserRoles } from '../constants/user-role.constant';
 import { Comment } from '../entity/comment.entity';
 import { validateData } from '../middleware';
 
@@ -35,6 +36,10 @@ const createComment = async (req: Request, res: Response) => {
 
 const deleteComment = async (req: Request, res: Response) => {
   const commentId = req.params.id;
+
+  if (req.currentUser.roles !== UserRoles.ADMIN) {
+    res.send_forbidden('You should be admin to do this operation');
+  }
 
   try {
     const movie = await appDataSource.getRepository(Comment).findOneBy({

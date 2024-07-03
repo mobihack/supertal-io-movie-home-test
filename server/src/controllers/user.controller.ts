@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import { config } from '../config';
 import appDataSource from '../config/app-data-source';
-import { UserRoles } from '../constants/user-role.constant';
+// import { UserRoles } from '../constants/user-role.constant';
 import { User } from '../entity/user.entity';
 import { validateData } from '../middleware';
 import { authService, bcryptService } from '../services';
@@ -39,12 +39,15 @@ const register = async (req: Request, res: Response) => {
     const user = appDataSource.getRepository(User).create({
       email: body.email,
       password: body.password,
-      roles: UserRoles.ADMIN,
+      roles: null, // UserRoles.ADMIN,
     });
 
     const results = await appDataSource.getRepository(User).save(user);
 
-    const token = authService().issue({ id: results.id });
+    const token = authService().issue({
+      id: results.id,
+      roles: results.roles || 'null',
+    });
 
     sendSessionCookie(res, token);
 
@@ -73,7 +76,10 @@ const login = async (req: Request, res: Response) => {
       }
 
       if (bcryptService().comparePassword(password, user.password)) {
-        const token = authService().issue({ id: user.id });
+        const token = authService().issue({
+          id: user.id,
+          roles: user.roles || 'null',
+        });
 
         sendSessionCookie(res, token);
 

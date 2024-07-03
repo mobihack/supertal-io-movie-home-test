@@ -20,6 +20,11 @@ export const movieFormSchema = z.object({
 
 const createMovie = async (req: Request, res: Response) => {
   const { title, description, releaseDate, duration, coverImageUrl } = req.body;
+
+  if (req.currentUser.roles !== UserRoles.ADMIN) {
+    res.send_forbidden('You should be admin to do this operation');
+  }
+
   try {
     const movie = appDataSource.getRepository(Movie).create({
       title,
@@ -40,6 +45,10 @@ const createMovie = async (req: Request, res: Response) => {
 
 const updateMovie = async (req: Request, res: Response) => {
   const movieId = req.params.id;
+
+  if (req.currentUser.roles !== UserRoles.ADMIN) {
+    res.send_forbidden('You should be admin to do this operation');
+  }
 
   const { title, description, releaseDate, duration } = req.body;
 
@@ -178,11 +187,7 @@ const getMovieLikes = async (req: Request, res: Response) => {
 const deleteMovie = async (req: Request, res: Response) => {
   const movieId = req.params.id;
 
-  const user = await appDataSource.getRepository(User).findOne({
-    where: { id: req.currentUser.id },
-  });
-
-  if (user.roles !== UserRoles.ADMIN) {
+  if (req.currentUser.roles !== UserRoles.ADMIN) {
     res.send_forbidden('You should be admin to do this operation');
   }
 
