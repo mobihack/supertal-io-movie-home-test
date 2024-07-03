@@ -1,0 +1,58 @@
+import clsx from "clsx";
+
+import {
+  HelperText,
+  Input,
+  InputLabel,
+  InputProps,
+  Textarea,
+  TextareaProps,
+} from "@/components";
+
+type ComponentProps = TextareaProps & InputProps;
+
+interface Props extends ComponentProps {
+  label: string;
+  name: string;
+  inputClassName?: string;
+  labelClassName?: string;
+  component?: "input" | "textarea";
+
+  helperText?: string;
+  error?: boolean;
+}
+
+export const FormField = ({
+  label,
+  name,
+  className,
+  component = "input",
+  inputClassName,
+  labelClassName,
+  helperText,
+  error = false,
+  ...props
+}: Props): JSX.Element => {
+  const Component = component === "input" ? Input : Textarea;
+
+  return (
+    <div className={className}>
+      <InputLabel htmlFor={name} className={labelClassName}>
+        {label}
+      </InputLabel>
+      <Component
+        error={error}
+        id={name}
+        name={name}
+        className={clsx(
+          "[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none",
+          inputClassName
+        )}
+        {...props}
+      />
+      {helperText && (
+        <HelperText error={error} helperText={helperText} className="mt-1" />
+      )}
+    </div>
+  );
+};

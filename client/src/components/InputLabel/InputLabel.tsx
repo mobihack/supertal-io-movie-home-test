@@ -1,4 +1,4 @@
-import { forwardRef,LabelHTMLAttributes } from "react";
+import { forwardRef, LabelHTMLAttributes } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -10,7 +10,7 @@ const InputLabel = forwardRef<HTMLLabelElement, InputLabelProps>(
     return (
       <label
         className={cn(
-          "flex w-full px-3 py-2 text-xs font-medium text-gray-800",
+          "flex w-full px-3 py-2 text-xs font-medium text-gray-800 dark:text-gray-200",
           className
         )}
         ref={ref}

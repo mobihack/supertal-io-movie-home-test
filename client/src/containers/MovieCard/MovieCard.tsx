@@ -1,8 +1,9 @@
+import { Button, Popover } from "@/components";
 import clsx from "clsx";
 import { format } from "date-fns";
 import { intervalToDuration } from "date-fns";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
-import { FiImage } from "react-icons/fi";
+import { FiEdit, FiImage, FiMoreVertical, FiTrash2 } from "react-icons/fi";
 
 interface Props {
   title: string;
@@ -14,7 +15,8 @@ interface Props {
   isLiked: boolean;
 
   onLikeChange: (newValue: boolean) => void;
-  onClick: () => void;
+  onDelete: () => void;
+  isAdmin?: boolean;
 }
 
 export const MovieCard = ({
@@ -24,7 +26,8 @@ export const MovieCard = ({
   coverUrl,
   isLiked,
   onLikeChange,
-  onClick,
+  isAdmin,
+  onDelete,
 }: Props): JSX.Element => {
   const formattedDuration = intervalToDuration({
     start: 0,
@@ -32,9 +35,7 @@ export const MovieCard = ({
   });
   return (
     <div className="relative">
-      <button
-        role="button"
-        onClick={onClick}
+      <div
         className={clsx(
           "flex flex-col w-full transition-colors",
           "bg-neutral-100 dark:bg-neutral-900 p-4 rounded-xl text-left",
@@ -42,6 +43,7 @@ export const MovieCard = ({
         )}
       >
         <div className="aspect-[2/3] relative">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             className="bg-neutral-300/50 dark:bg-neutral-800/50 rounded-xl w-full min-h-full indent-[-9999px] object-contain z-10 absolute"
             src={coverUrl || ""}
@@ -59,22 +61,59 @@ export const MovieCard = ({
           <p className="text-sm text-neutral-700 dark:text-neutral-400">
             {format(releaseDate, "Y")} &middot;{" "}
             {`${formattedDuration.hours ? `${formattedDuration.hours}h` : ""} ${
-              formattedDuration.minutes
-            }m`}
+              formattedDuration.minutes ? `${formattedDuration.minutes}m` : ""
+            }`}
           </p>
         </div>
-      </button>
-      <button
-        role="button"
-        onClick={() => onLikeChange(!isLiked)}
-        className="absolute top-6 right-6 z-40 p-2 text-red-500 text-3xl group"
+      </div>
+      <div
+        className="absolute top-6 right-6 z-40"
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+        }}
       >
-        {isLiked ? (
-          <AiFillHeart />
-        ) : (
-          <AiOutlineHeart className="transition group-hover:scale-125" />
+        <button
+          role="button"
+          onClick={() => onLikeChange(!isLiked)}
+          className="p-2 text-red-500 text-2xl group"
+        >
+          {isLiked ? (
+            <AiFillHeart />
+          ) : (
+            <AiOutlineHeart className="transition group-hover:scale-125" />
+          )}
+        </button>
+        {isAdmin && (
+          <Popover.root>
+            <Popover.trigger asChild>
+              <button role="button" className="p-2 text-2xl group">
+                <FiMoreVertical />
+              </button>
+            </Popover.trigger>
+            <Popover.content align="end" className="bg-white p-0 w-36">
+              <p className="text-sm py-2 text-gray-400 px-4">Actions</p>
+              <hr />
+              {/* <Button
+              variant="ghost"
+              width="full"
+              className="justify-start rounded-none"
+            >
+              <FiEdit className="mr-2" /> Modify
+            </Button>
+            <br /> */}
+              <Button
+                onClick={onDelete}
+                variant="ghost"
+                width="full"
+                className="justify-start rounded-none"
+              >
+                <FiTrash2 className="mr-2" /> Delete
+              </Button>
+            </Popover.content>
+          </Popover.root>
         )}
-      </button>
+      </div>
     </div>
   );
 };
