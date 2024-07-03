@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { DetailedHTMLProps, HTMLAttributes, ReactNode } from "react";
 
 import { ThemeMode, useTheme } from "@/hooks/useTheme";
-import { Chip, LoadingIndicator, ToggleGroup } from "@/components";
+import { Button, Chip, LoadingIndicator, ToggleGroup } from "@/components";
 import {
   FiHeart,
   FiLogOut,
@@ -101,7 +101,7 @@ export const PrivateLayout = ({
         ))}
         <br />
         <div className="mt-auto border-t border-gray-500/20 bg-white dark:bg-black p-4 -mx-4 -mb-4">
-          <div className="mb-4 flex gap-2 justify-center">
+          <div className="mb-4 flex flex-wrap gap-2 justify-center">
             <span className="">{auth.currentUser.email}</span>
 
             <Chip size="small">
@@ -144,6 +144,25 @@ export const PrivateLayout = ({
         </div>
       </aside>
       <main className="flex flex-1 container">{children}</main>
+      <footer className="md:hidden w-screen fixed bottom-0 mb-4 flex justify-center">
+        <div className="divide-x divide-brand-400 flex items-center justify-center bg-brand-600 rounded-xl overflow-hidden xs:scale-100 scale-90">
+          {[...appNavigation, ...userNavigation].map((link) => (
+            <Button
+              onClick={() => {
+                router.push(link.href);
+              }}
+              key={link.name}
+              variant={
+                router.pathname.startsWith(link.href) ? "secondary" : "ghost"
+              }
+              className="rounded-none"
+            >
+              <link.icon className="mr-2" />
+              {link.name}
+            </Button>
+          ))}
+        </div>
+      </footer>
     </div>
   );
 };
