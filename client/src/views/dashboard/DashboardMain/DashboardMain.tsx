@@ -113,6 +113,11 @@ export const DashboardMain = ({
           )
         }
       />
+
+      {movies?.length === 0 && (
+        <>{`Couldn't`} find any movies. Please wait for Admin to add one</>
+      )}
+
       <div className="grid xl:grid-cols-5 lg:grid-cols-4 sm:grid-cols-3 grid-cols-2 gap-4 justify-center mb-24">
         {movies?.map((item) => (
           <Link key={item.title} href={`/dashboard/${item.id}`}>
