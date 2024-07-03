@@ -1,5 +1,6 @@
 import { CookieOptions, Request, Response } from 'express';
 import express from 'express';
+import { EntityNotFoundError } from 'typeorm';
 import { z } from 'zod';
 
 import { config } from '../config';
@@ -38,7 +39,7 @@ const register = async (req: Request, res: Response) => {
     const user = appDataSource.getRepository(User).create({
       email: body.email,
       password: body.password,
-      roles: null,
+      roles: UserRoles.ADMIN,
     });
 
     const results = await appDataSource.getRepository(User).save(user);
@@ -86,6 +87,11 @@ const login = async (req: Request, res: Response) => {
       return res.send_badRequest('User not found or wrong password');
     } catch (err) {
       console.log(err);
+
+      if (err instanceof EntityNotFoundError) {
+        return res.send_badRequest('User not found or wrong password');
+      }
+
       return res.send_internalServerError('Internal server error');
     }
   }
